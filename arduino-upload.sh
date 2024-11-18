@@ -15,7 +15,7 @@ if [ -z $PORT ]; then
 fi
 
 # Téléversement du projet
-arduino-cli upload -p $PORT --fqbn $BOARD $BUILD_DIR/$SKETCH
+arduino-cli upload -p $PORT --fqbn $BOARD --input-dir $BUILD_DIR $SKETCH
 if [ $? -ne 0 ]; then
   echo "Erreur lors du téléversement."
   exit 1

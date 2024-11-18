@@ -16,15 +16,15 @@ Projet Object Connecté de 3A ENSIMAG. Code et documentation pour un distributeu
 
 1. Installer `Arduino CLI` :
 
-```
-sudo snap install arduino-cli
-```
-
-- _Version recommandée_
+- _Avec snap_
 
 ```
-sudo snap install arduino-cli --channel=1.1.0/stable
+sudo snap install --stable arduino-cli
 ```
+
+- _Avec le script d'installation de arduino-cli_
+
+Suivre les ![instructions d'installation](https://arduino.github.io/arduino-cli/0.24/installation/), puis ajouter le binaire `arduino-cli` au path
 
 2. Installer le core Arduino :
 
@@ -54,3 +54,9 @@ arduino-cli board list
 ```
 ./arduino-upload.sh $PORT
 ```
+
+### FAQ 
+
+- **J'ai l'erreur `avrdude: ser_open(): can't open device "/dev/ttyACM0": Permission denied`**
+
+Pour resoudre cette erreur, il faut ajouter votre utilisateur courrant au groupe des utilisateurs qui peuvent dialoguer avec les périphériques. La commande est la suivante : `sudo usermod -a -G dialout $USER`
