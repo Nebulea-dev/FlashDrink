@@ -1,0 +1,7 @@
+[project]
+name = "FlashDrink"
+version = "1.0.0"
+dependencies = [
+  "flask",
+  "gunicorn"
+]
