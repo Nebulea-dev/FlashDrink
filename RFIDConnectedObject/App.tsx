@@ -1,41 +1,26 @@
-import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import NfcManager, {NfcTech} from 'react-native-nfc-manager';
+import React, { useState } from 'react';
+import { UserContext } from './contexts/UserContext';
+import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
+import ScanScreen from './screens/ScanScreen';
 
-// Pre-step, call this before any NFC operations
-NfcManager.start();
+const App: React.FC = () => {
+  const [userId, setUserId] = useState<number | null>(null);
+  const [isRegistering, setIsRegistering] = useState<boolean>(false);
 
-function App() {
-  async function readNdef() {
-    try {
-      // register for the NFC tag with NDEF in it
-      await NfcManager.requestTechnology(NfcTech.Ndef);
-      // the resolved tag object will contain `ndefMessage` property
-      const tag = await NfcManager.getTag();
-      console.warn('Tag found', tag);
-    } catch (ex) {
-      console.warn('Oops!', ex);
-    } finally {
-      // stop the nfc scanning
-      NfcManager.cancelTechnologyRequest();
-    }
+  if (userId) {
+    return <ScanScreen userId={userId} />;
   }
 
-  return (
-    <View style={styles.wrapper}>
-      <TouchableOpacity onPress={readNdef}>
-        <Text>Scan a Tag</Text>
-      </TouchableOpacity>
-    </View>
+  return isRegistering ? (
+    <RegisterScreen onNavigateToLogin={() => setIsRegistering(false)} />
+  ) : (
+    <LoginScreen
+      onLoginSuccess={setUserId}
+      onNavigateToRegister={() => setIsRegistering(true)}
+    />
   );
-}
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+};
 
 export default App;
+
