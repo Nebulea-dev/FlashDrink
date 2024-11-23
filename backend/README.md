@@ -205,7 +205,7 @@ uv venv
 
 ```
 source .venv/bin/activate
-.venv/bin/gunicorn --workers 4 --bind 0.0.0.0:5000 app:app
+gunicorn --workers 4 --bind 0.0.0.0:5000 app:app
 ```
 
 5. (Optional) **Add backend as a linux service with `systemctl`**

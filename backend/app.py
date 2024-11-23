@@ -88,20 +88,19 @@ def disconnect_tag():
 @app.route('/addBalance', methods=['POST'])
 def add_balance():
     data = request.json
-    tag_id = data.get('tag_id')
+    user_id = data.get('user_id')
     amount = data.get('amount')
 
-    if not tag_id or amount is None:
-        return jsonify({"error": "Missing 'tag_id' or 'amount'"}), 400
+    if not user_id or amount is None:
+        return jsonify({"error": "Missing 'user_id' or 'amount'"}), 400
 
     with connect_db() as conn:
-        cursor = conn.execute("SELECT user_id FROM tags WHERE tag_id = ?", (tag_id,))
+        cursor = conn.execute("SELECT id FROM users WHERE id = ?", (user_id,))
         user = cursor.fetchone()
-        
-        if not user:
-            return jsonify({"error": "Tag not associated with any user"}), 404
 
-        user_id = user['user_id']
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
         conn.execute("UPDATE users SET balance = balance + ? WHERE id = ?", (amount, user_id))
         conn.commit()
         return jsonify({"message": "Balance added successfully"}), 200
@@ -110,22 +109,21 @@ def add_balance():
 @app.route('/removeBalance', methods=['POST'])
 def remove_balance():
     data = request.json
-    tag_id = data.get('tag_id')
+    user_id = data.get('user_id')
     amount = data.get('amount')
 
-    if not tag_id or amount is None:
-        return jsonify({"error": "Missing 'tag_id' or 'amount'"}), 400
+    if not user_id or amount is None:
+        return jsonify({"error": "Missing 'user_id' or 'amount'"}), 400
 
     with connect_db() as conn:
-        cursor = conn.execute("SELECT user_id, balance FROM users INNER JOIN tags ON users.id = tags.user_id WHERE tag_id = ?", (tag_id,))
+        cursor = conn.execute("SELECT balance FROM users WHERE id = ?", (user_id,))
         user = cursor.fetchone()
-        
+
         if not user:
-            return jsonify({"error": "Tag not associated with any user"}), 404
+            return jsonify({"error": "User not found"}), 404
         if user['balance'] < amount:
             return jsonify({"error": "Insufficient balance"}), 400
 
-        user_id = user['user_id']
         conn.execute("UPDATE users SET balance = balance - ? WHERE id = ?", (amount, user_id))
         conn.commit()
         return jsonify({"message": "Balance deducted successfully"}), 200
@@ -149,3 +147,4 @@ def get_balance():
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True)
+
