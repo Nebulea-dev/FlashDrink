@@ -28,7 +28,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ onNavigateToLogin }) =>
         Alert.alert('Registration Failed', result.error || 'Unable to register');
       }
     } catch (error) {
-      Alert.alert('Error', 'Could not connect to the server');
+      Alert.alert('Error', `Could not connect to the server : ${error}`);
     } finally {
       setLoading(false);
     }
