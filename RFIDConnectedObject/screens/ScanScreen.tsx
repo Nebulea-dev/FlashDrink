@@ -11,6 +11,8 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ userId }) => {
   const [balance, setBalance] = useState<number | null>(null);
   const [amount, setAmount] = useState<string>(''); // Input for amount to add
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isScanning, setIsScanning] = useState<boolean>(false); // New state for scanning
+  const [connectedTag, setConnectedTag] = useState<string | null>(null); // Track connected tag ID
 
   // Function to fetch balance from the backend
   const fetchBalance = async () => {
@@ -47,7 +49,7 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ userId }) => {
       const data = await response.json();
       if (data.message) {
         Alert.alert('Success', data.message);
-        setAmount('');  // Clear the input field
+        setAmount(''); // Clear the input field
         fetchBalance(); // Refresh balance
       } else {
         Alert.alert('Error', data.error || 'Failed to add balance');
@@ -59,23 +61,60 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ userId }) => {
     }
   };
 
-  // Function to handle NFC scanning
+  // Function to handle NFC scanning and connecting the tag
   const readNdef = async () => {
+    setIsScanning(true); // Enable scanning state
     try {
       await NfcManager.requestTechnology(NfcTech.Ndef);
       const tag = await NfcManager.getTag();
-      Alert.alert('Tag Found', JSON.stringify(tag));
+      const tagId = tag.id;
 
-      // Optionally send tag info to backend (e.g., connect tag to user)
-      await fetch(`${BACKEND_URL}connectTagWithUser`, {
+      if (!tagId) {
+        Alert.alert('Error', 'Invalid tag ID');
+        return;
+      }
+
+      const response = await fetch(`${BACKEND_URL}connectTagWithUser`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tag_id: tag.id, user_id: userId }),
+        body: JSON.stringify({ tag_id: tagId, user_id: userId }),
       });
+      const data = await response.json();
+
+      if (data.message) {
+        Alert.alert('Success', 'Tag connected successfully');
+        setConnectedTag(tagId); // Update the connected tag ID
+      } else {
+        Alert.alert('Error', data.error || 'Failed to connect tag');
+      }
     } catch (ex) {
       Alert.alert('Error', 'Failed to scan tag');
     } finally {
+      setIsScanning(false); // Reset scanning state
       NfcManager.cancelTechnologyRequest();
+    }
+  };
+
+  // Function to disconnect the tag
+  const disconnectTag = async () => {
+    if (!connectedTag) return;
+
+    try {
+      const response = await fetch(`${BACKEND_URL}disconnectTag`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tag_id: connectedTag }),
+      });
+      const data = await response.json();
+
+      if (data.message) {
+        Alert.alert('Success', 'Tag disconnected successfully');
+        setConnectedTag(null); // Clear the connected tag ID
+      } else {
+        Alert.alert('Error', data.error || 'Failed to disconnect tag');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to disconnect tag');
     }
   };
 
@@ -87,8 +126,15 @@ const ScanScreen: React.FC<ScanScreenProps> = ({ userId }) => {
   return (
     <View style={styles.wrapper}>
       <Text style={styles.title}>Scan RFID Tag</Text>
-      <TouchableOpacity style={styles.button} onPress={readNdef}>
-        <Text style={styles.buttonText}>Scan a Tag</Text>
+
+      <TouchableOpacity
+        style={[styles.button, connectedTag ? styles.disconnectButton : null]}
+        onPress={connectedTag ? disconnectTag : readNdef}
+        disabled={isScanning} // Disable during scanning or if a tag is connected
+      >
+        <Text style={styles.buttonText}>
+          {connectedTag ? 'Disconnect Tag' : isScanning ? 'Scanning...' : 'Scan a Tag'}
+        </Text>
       </TouchableOpacity>
 
       {balance !== null && (
@@ -138,6 +184,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     marginBottom: 10,
+  },
+  disconnectButton: {
+    backgroundColor: '#FF0000', // Red background for the "Disconnect" button
   },
   buttonText: {
     color: '#fff',
