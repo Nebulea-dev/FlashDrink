@@ -16,15 +16,15 @@ Projet Object Connecté de 3A ENSIMAG. Code et documentation pour un distributeu
 
 1. Installer `Arduino CLI` :
 
-- _Avec snap_
+- _Option 1 (recommandée) : avec le script d'installation de arduino-cli_
+
+Suivre les ![instructions d'installation](https://arduino.github.io/arduino-cli/0.24/installation/), puis ajouter le binaire `arduino-cli` au path
+
+- _Option 2 : avec snap_
 
 ```
 sudo snap install --stable arduino-cli
 ```
-
-- _Avec le script d'installation de arduino-cli_
-
-Suivre les ![instructions d'installation](https://arduino.github.io/arduino-cli/0.24/installation/), puis ajouter le binaire `arduino-cli` au path
 
 2. Installer le core Arduino :
 
