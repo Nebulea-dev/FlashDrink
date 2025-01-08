@@ -4,11 +4,11 @@ from time import sleep
 import sys
 import signal
 
-import FD_Pump
-import FD_Button
-import FD_API
-import FD_RFID
-import FD_Display
+from Pump import FD_Pump
+from Display import FD_Button
+from API import FD_API
+from RFID import FD_RFID
+from Display import FD_Display
 
 class States(Enum):
     INIT = 0
