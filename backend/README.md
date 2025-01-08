@@ -182,6 +182,22 @@ The API communicates with an SQLite database to store user information, RFID tag
 - `400`: Missing required fields.
 - `404`: User not found.
 
+### 8. **Get User of Tag**
+
+**Endpoint**: `/getUserOfTag`
+**Method**: `GET`
+**Description**: Retrieves the user associated with a tag.
+
+**Query Parameters**:
+
+- `tag_id`: Tag's ID.
+
+**Responses**:
+
+- `200`: Returns the tag's associated user.
+- `400`: Missing required fields.
+- `404`: Tag not found.
+
 
 
 ## Run the Application

@@ -144,6 +144,22 @@ def get_balance():
             return jsonify({"balance": user['balance']}), 200
         return jsonify({"error": "User not found"}), 404
 
+# 8. Get user associated to tag
+@app.route('/getUserOfTag', methods=['GET'])
+def get_user_of_tag():
+    tag_id = request.args.get('tag_id')
+
+    if not tag_id:
+        return jsonify({"error": "Missing 'tag_id'"}), 400
+
+    with connect_db() as conn:
+        cursor = conn.execute("SELECT user_id FROM tags WHERE tag_id = ?", (tag_id,))
+        tag = cursor.fetchone()
+
+        if tag:
+            return jsonify({"user_id": tag['user_id']}), 200
+        return jsonify({"error": "Tag not found"}), 404
+
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True)
