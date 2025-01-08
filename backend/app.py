@@ -84,8 +84,8 @@ def disconnect_tag():
         conn.commit()
         return jsonify({"message": "Tag disconnected successfully"}), 200
 
-# 5. Add balance to user account
-@app.route('/addBalance', methods=['POST'])
+# 5. Set balance to user account
+@app.route('/setBalance', methods=['POST'])
 def add_balance():
     data = request.json
     user_id = data.get('user_id')
@@ -101,9 +101,9 @@ def add_balance():
         if not user:
             return jsonify({"error": "User not found"}), 404
 
-        conn.execute("UPDATE users SET balance = balance + ? WHERE id = ?", (amount, user_id))
+        conn.execute("UPDATE users SET balance = ? WHERE id = ?", (amount, user_id))
         conn.commit()
-        return jsonify({"message": "Balance added successfully"}), 200
+        return jsonify({"message": "Balance set successfully"}), 200
 
 # 6. Remove balance from user account
 @app.route('/removeBalance', methods=['POST'])

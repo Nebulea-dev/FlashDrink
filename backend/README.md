@@ -12,8 +12,9 @@ This documentation provides an overview of the Flask API endpoints used to manag
    - [Connect RFID Tag to User](#connect-rfid-tag-to-user)
    - [Disconnect RFID Tag](#disconnect-rfid-tag)
    - [Add Balance](#add-balance)
-   - [Remove Balance](#remove-balance)
+   - [Set Balance](#set-balance)
    - [Get User Balance](#get-user-balance)
+   - [Get User of Tag](#get-user-of-tag)
 4. [Run the Application](#run-the-application)
 
 ---
@@ -145,11 +146,11 @@ The API communicates with an SQLite database to store user information, RFID tag
 - `400`: Missing required fields.
 - `404`: Tag not associated with any user.
 
-### 6. **Remove Balance**
+### 6. **Set Balance**
 
-**Endpoint**: `/removeBalance`
+**Endpoint**: `/setBalance`
 **Method**: `POST`
-**Description**: Deducts balance from a user's account using an RFID tag.
+**Description**: Set balance from a user's account using an RFID tag.
 
 **Request Body**:
 
@@ -162,8 +163,8 @@ The API communicates with an SQLite database to store user information, RFID tag
 
 **Responses**:
 
-- `200`: Balance deducted successfully.
-- `400`: Insufficient balance or missing fields.
+- `200`: Balance set successfully.
+- `400`: Missing required fields.
 - `404`: Tag not associated with any user.
 
 ### 7. **Get User Balance**
