@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 
 class FD_Pump:
-    PUMP_CHANNEL = 21
+    PUMP_CHANNEL = 15
 
     @staticmethod
     def init():

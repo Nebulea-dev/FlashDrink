@@ -16,4 +16,7 @@ class FD_RFID:
         if status != reader.MI_OK:
             return None
 
-        return uid
+        hex_uid = ""
+        for number in uid[:-1]:
+            hex_uid += "%X" % number
+        return hex_uid

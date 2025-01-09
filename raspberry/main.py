@@ -4,11 +4,11 @@ from time import sleep
 import sys
 import signal
 
+from Display import FD_Display
 from Pump import FD_Pump
-from Display import FD_Button
+from Button import FD_Button
 from API import FD_API
 from RFID import FD_RFID
-from Display import FD_Display
 
 class States(Enum):
     INIT = 0
@@ -28,7 +28,9 @@ def handle_init():
     global current_state
     global customer_tag_UID
 
-    UID = FD_RFID.read_tag()
+    FD_Display.write_letters("Err ")
+
+    UID = FD_RFID.read_UID()
     if UID is not None:
         customer_tag_UID = UID
         current_state = States.IDENTIFYING_TAG
@@ -51,9 +53,12 @@ def handle_identifying_tag():
 def handle_idle():
     global current_state
     global customer_tag_UID
+    global customer_balance
+
+    FD_Display.write_number(int(customer_balance*100))
 
     # If tag is still present
-    if FD_RFID.read_tag() != customer_tag_UID:
+    if FD_RFID.read_UID() != customer_tag_UID:
         current_state = States.INIT
         return
 
@@ -68,27 +73,22 @@ def handle_pumping():
     global customer_balance
 
     # If tag is still present
-    if FD_RFID.read_tag() != customer_tag_UID:
+    if FD_RFID.read_UID() != customer_tag_UID:
         FD_Pump.stop_pump()
         current_state = States.INIT
         return
 
-    if not FD_Button.button_pressed():
+    if not FD_Button.button_pressed() or customer_balance <= 0.0:
         FD_Pump.stop_pump()
         current_state = States.IDLE
         return
 
-    if customer_balance == 0:
-        FD_Pump.stop_pump()
-        current_state = States.INSUFFISANT_BALANCE
-        return
-
     FD_Pump.start_pump()
-    customer_balance -= 0.01
+    customer_balance -= 1.00
     customer_balance = round(customer_balance, 2)
     customer_balance = max(customer_balance, 0)
 
-    FD_Display.display_letters(str(customer_balance))
+    FD_Display.write_number(int(customer_balance*100))
 
     sleep(0.1)
 
@@ -100,7 +100,7 @@ def handle_insuffisant_balance():
     global customer_balance
 
     # If tag is still present
-    if FD_RFID.read_tag() != customer_tag_UID:
+    if FD_RFID.read_UID() != customer_tag_UID:
         current_state = States.INIT
         return
 
@@ -114,11 +114,11 @@ def handle_error():
     global current_state
 
     # If tag is still present
-    if FD_RFID.read_tag() != customer_tag_UID:
+    if FD_RFID.read_UID() != customer_tag_UID:
         current_state = States.INIT
         return
 
-    FD_Display.display_letters("Err ")
+    FD_Display.write_letters("Err ")
 
 def signal_handler(_sig, _frame):
     print("Exiting gracefully")
@@ -127,8 +127,13 @@ def signal_handler(_sig, _frame):
     sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
+
+# Init GPIOs
+FD_Button.init()
+FD_Pump.init()
+
 while True:
-    FD_Button.update_button_state()
+    print(current_state)
 
     if current_state == States.INIT:
         handle_init()
