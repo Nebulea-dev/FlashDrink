@@ -1,2 +1,6 @@
 # Stop. Get some help.
 .vscode
+
+# Python venv and packages
+venv
+__pycache__
