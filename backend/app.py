@@ -86,7 +86,7 @@ def disconnect_tag():
 
 # 5. Set balance to user account
 @app.route('/setBalance', methods=['POST'])
-def add_balance():
+def set_balance():
     data = request.json
     user_id = data.get('user_id')
     amount = data.get('amount')
