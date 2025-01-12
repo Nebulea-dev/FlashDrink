@@ -105,6 +105,27 @@ def add_balance():
         conn.commit()
         return jsonify({"message": "Balance set successfully"}), 200
 
+# 5. Add balance to user account
+@app.route('/addBalance', methods=['POST'])
+def add_balance():
+    data = request.json
+    user_id = data.get('user_id')
+    amount = data.get('amount')
+
+    if not user_id or amount is None:
+        return jsonify({"error": "Missing 'user_id' or 'amount'"}), 400
+
+    with connect_db() as conn:
+        cursor = conn.execute("SELECT balance FROM users WHERE id = ?", (user_id,))
+        user = cursor.fetchone()
+
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        conn.execute("UPDATE users SET balance = balance + ? WHERE id = ?", (amount, user_id))
+        conn.commit()
+        return jsonify({"message": "Balance added successfully"}), 200
+
 # 6. Remove balance from user account
 @app.route('/removeBalance', methods=['POST'])
 def remove_balance():
