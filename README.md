@@ -10,19 +10,19 @@ Une fois son goblet associé, le système se charge de débiter automatiquement 
 
 ## Matériel utilisé
 
-- **Microcontrolleur** : [Raspberry Pi 3 Model B](https://www.raspberrypi.com/products/raspberry-pi-3-model-b/), *40.00€*.
+- **Microcontrolleur** : [Raspberry Pi 3 Model B](https://www.raspberrypi.com/products/raspberry-pi-3-model-b/), **40.00€**.
 
-- **Connecteur récipient** : Lecteur RFID [MFRC522](https://www.google.com/search?q=MFRC522), *7.00€*.
+- **Connecteur récipient** : Lecteur RFID [MFRC522](https://www.google.com/search?q=MFRC522), **7.00€**.
 
-- **Afficheur** : 7-Display [TM1637](https://www.google.com/search?q=TM1637), *7.00€*.
+- **Afficheur** : 7-Display [TM1637](https://www.google.com/search?q=TM1637), **7.00€**.
 
-- **Distribution du liquide** : Pompe submergée, *3.80€*.
+- **Distribution du liquide** : Pompe submergée, **3.80€**.
 
-- **Interaction utilisateur** : Bouton classique d'arcade, *3.70€*.
+- **Interaction utilisateur** : Bouton classique d'arcade, **3.70€**.
 
 - **MOSFET** : [Pololu Power Switch](https://www.pololu.com/product/2808), **3.95€**.
 
-- **Circuit** : câblage électrique et tube étanche, *4.00€*.
+- **Circuit** : câblage électrique et tube étanche, **4.00€**.
 
 - **Impression 3D** : 400 grammes de PLA, **8.00€**.
 
