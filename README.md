@@ -165,7 +165,51 @@ Allez sur cet [article Medium](https://medium.com/@tywosemail/building-an-apk-fi
 
 Exécutez le script `build.sh`, qui va générer l'APK `app-release.apk` à la racine du dossier `mobile-app`.
 
-## Démonstration
+## Manuel d'utilisation
+
+### Connexion
+
+Un utilisateur lance l'application FlashDrink sur son smartphone. Il a le choix entre se connecter ou bien créer un compte. S'il possède déjà un compte, il peut se connecter avec ses identifiants
+
+<img src="assets/app/login.png" alt="Page de connexion" width="200">
+
+Si l'utilisateur n'a pas de compte, il peut cliquer sur le lien `Don't have an account? Register`. Cela le mène vers la page d'inscription, où il peut créer ses indentifiants
+
+<img src="assets/app/register.png" alt="Page d'inscription" width="200">
+
+### Synchronisation
+
+Une fois connecté sur l'applicaiton, l'utilisateur peut faire 2 actions : synchroniser son goblet à son compte, ou ajouter du solde à son compte.
+
+<img src="assets/app/main_page.png" alt="Page principale" width="200">
+
+Pour relier son goblet à son compte, il clique sur le bouton `Scan a Tag` qui fait passer l'application en mode "Scan de tag RFID". 
+
+<img src="assets/app/scan_tag.png" alt="Interface lorsque l'application cherche un tag" width="200">
+
+Lorsque l'utilisateur place le goblet sur le scanneur RFID de son smartphone (souvent placé à l'arrière du smartphone), l'application l'informe que le tag a été scanné avec succès.
+
+<img src="assets/app/scan_tag_success.png" alt="Notification de succès de scan de tag" width="200">
+
+Il peut à présent choisir de déconnecter son compte du tag en cliquant sur le bouton `Disconnect Tag`
+
+<img src="assets/app/main_page_scanned.png" alt="Interface lorsqu'un tag est synchonisé" width="200">
+
+Si l'utilisateur clique sur ce  bouton, l'application l'informe que le tag a bien été déconnecté
+
+<img src="assets/app/disconnect_success.png" alt="Notification de succès de déconnexion du tag" width="200">
+
+### Ajout de solde
+
+Pour ajouter du solde à son compte, l'utilisateur peut rentrer un nombre dans le champ textuel, puis appuyer sur le bouton `Add Balance`
+
+<img src="assets/app/balance.png" alt="Interface pour ajouter du solde à son compte" width="200">
+
+Lorsque l'utilisateur clique sur ce bouton, l'applicaiton l'informe que le solde a bien été ajouté
+
+<img src="assets/app/balance_success.png" alt="Notification de succès d'ajout de solde" width="200">
+
+### Interaction avec le distributeur
 
 L’utilisateur positionne son récipient sur le distributeur, se distribue lui-même la quantité souhaitée, et voit son solde restant s’afficher en temps réel.
 
